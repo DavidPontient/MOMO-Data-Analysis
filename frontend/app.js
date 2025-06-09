@@ -1,10 +1,10 @@
 // Exampless
 const transactions = [
-  { date: "2024-01-01", type: "incoming", amount: 7000, description: "From Kayumba David" },
-  { date: "2024-01-02", type: "payment", amount: 1000, description: "To Sipho Tremorio Chakhala" },
-  { date: "2024-01-03", type: "payment", amount: 1000, description: "To Airtime" },
-  { date: "2024-01-04", type: "withdrawal", amount: 20000, description: "Via Kayumba David" },
-  { date: "2024-01-05", type: "bundle", amount: 2000, description: "1.5GB of interenet" },
+  { date: "2024-01-01", type: "incoming", amount: 5000, description: "From John Doe" },
+  { date: "2024-01-02", type: "payment", amount: 1500, description: "To Jane Smith" },
+  { date: "2024-01-03", type: "payment", amount: 3000, description: "To Airtime" },
+  { date: "2024-01-04", type: "withdrawal", amount: 20000, description: "Via agent Jane Doe" },
+  { date: "2024-01-05", type: "bundle", amount: 2000, description: "1GB of interenet" },
 ];
 
 // Add tables
