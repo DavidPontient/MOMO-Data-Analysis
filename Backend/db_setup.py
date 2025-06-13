@@ -1,27 +1,21 @@
 import sqlite3
 
-# Connect to (or create) the SQLite database
-conn = sqlite3.connect('momo_data.db')
-cursor = conn.cursor()
+def create_db():
+    conn = sqlite3.connect('momo_data.db')
+    c = conn.cursor()
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS transactions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            sender TEXT,
+            date TEXT,
+            message TEXT,
+            category TEXT
+        )
+    ''')
+    conn.commit()
+    conn.close()
 
-# Create a table for SMS transactions
-cursor.execute('''
-CREATE TABLE IF NOT EXISTS transactions (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    date TEXT,
-    time TEXT,
-    sender TEXT,
-    receiver TEXT,
-    amount REAL,
-    currency TEXT,
-    transaction_type TEXT,
-    reference TEXT,
-    message TEXT
-)
-''')
+if __name__ == '__main__':
+    create_db()
+    print("Database and table created.")
 
-print(" Database and table 'transactions' created successfully.")
-
-# Save and close the connection
-conn.commit()
-conn.close()
