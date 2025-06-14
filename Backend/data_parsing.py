@@ -96,5 +96,5 @@ def insert_into_database(messages, db_connect):
 
 #mention import file at bottom because parse_xml comes first.
 #Call db_connect here through a variable
-xml_file = r"Put xml file path here"
+xml_file = '../data/modified_sms_v2.xml'
 xml_data = parse_xml(xml_file)
