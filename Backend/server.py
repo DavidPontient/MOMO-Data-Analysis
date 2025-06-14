@@ -1,42 +1,45 @@
-from flask import Flask, send_from_directory, jsonify
+from flask import Flask, jsonify, send_from_directory
 import sqlite3
 import os
 
-app = Flask(__name__, static_folder='frontend')
+app = Flask(__name__, static_folder='../frontend')
 
-DB_PATH = 'transactions.db'  # Make sure this matches your database file name
+DB_PATH = os.path.join(os.path.dirname(__file__), 'transactions.db')
 
-# Serve the HTML, CSS, JS files from the frontend folder
+def get_db_connection():
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    return conn
+
 @app.route('/')
-def serve_dashboard():
-    return send_from_directory('frontend', 'index.html')
+def serve_index():
+    return send_from_directory(app.static_folder, 'index.html')
 
 @app.route('/<path:path>')
-def serve_static_file(path):
-    return send_from_directory('frontend', path)
+def serve_static(path):
+    return send_from_directory(app.static_folder, path)
 
-# Route to get all transaction data as JSON
 @app.route('/data')
-def get_transaction_data():
-    conn = sqlite3.connect(DB_PATH)
+def get_transactions():
+    conn = get_db_connection()
     cursor = conn.cursor()
-
-    cursor.execute("SELECT id, type, amount, date, sender, receiver, transaction_id FROM transactions")
+    cursor.execute("SELECT * FROM transactions ORDER BY date DESC")
     rows = cursor.fetchall()
     conn.close()
-
-    transactions = [
-        {
-            'id': row[0],
-            'type': row[1],
-            'amount': row[2],
-            'date': row[3],
-            'sender': row[4],
-            'receiver': row[5],
-            'transaction_id': row[6]
-        }
-        for row in rows
-    ]
+    
+    transactions = []
+    for row in rows:
+        transactions.append({
+            'id': row['id'],
+            'type': row['type'],
+            'amount': row['amount'],
+            'fee': row['fee'],
+            'date': row['date'],
+            'sender': row['sender'],
+            'receiver': row['receiver'],
+            'transaction_id': row['transaction_id'],
+            'raw_message': row['raw_message']
+        })
 
     return jsonify(transactions)
 
