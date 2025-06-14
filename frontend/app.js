@@ -1,105 +1,130 @@
-// Exampless
-const transactions = [
-  { date: "2024-01-01", type: "incoming", amount: 5000, description: "From John Doe" },
-  { date: "2024-01-02", type: "payment", amount: 1500, description: "To Jane Smith" },
-  { date: "2024-01-03", type: "payment", amount: 3000, description: "To Airtime" },
-  { date: "2024-01-04", type: "withdrawal", amount: 20000, description: "Via agent Jane Doe" },
-  { date: "2024-01-05", type: "bundle", amount: 2000, description: "1GB of interenet" },
-];
+let transactions = [];
 
-// Add tables
-function populateTable(data) {
-  const tbody = document.getElementById("transaction-table-body");
+document.addEventListener("DOMContentLoaded", async () => {
+  // Load data from backend once page is redy
+  await loadTransactions();
+  setupFilters();
+  updateDashboard(transactions);
+});
+
+// Fetch transaction data from the back-end
+async function loadTransactions() {
+  try {
+    const res = await fetch("/data");
+    const data = await res.json();
+    transactions = data;
+  } catch (err) {
+    console.error("Could not load data:", err);
+  }
+}
+
+// Set up the filter buton to apply filtering logic
+function setupFilters() {
+  document.getElementById("applyFilters").addEventListener("click", () => {
+    const filtered = filterData(transactions);
+    updateDashboard(filtered);
+  });
+}
+
+// Filter data based on user input
+function filterData(data) {
+  const category = document.getElementById("categoryFilter").value;
+  const min = parseFloat(document.getElementById("minAmount").value) || 0;
+  const max = parseFloat(document.getElementById("maxAmount").value) || Infinity;
+
+  return data.filter(tx =>
+    (category === "All" || tx.category === category) &&
+    tx.amount >= min && tx.amount <= max
+  );
+}
+
+// Update the entier dashboard
+function updateDashboard(data) {
+  showTable(data);
+  showCategoryChart(data);
+  showMonthlyChart(data);
+}
+
+// Display the table of transactions
+function showTable(data) {
+  const tbody = document.getElementById("transactionTableBody");
   tbody.innerHTML = "";
+
   data.forEach(tx => {
-    const row = `<tr>
+    const row = document.createElement("tr");
+    row.innerHTML = `
       <td>${tx.date}</td>
-      <td>${tx.type}</td>
-      <td>${tx.amount}</td>
-      <td>${tx.description}</td>
-    </tr>`;
-    tbody.insertAdjacentHTML("beforeend", row);
+      <td>${tx.category}</td>
+      <td>${tx.amount} RWF</td>
+      <td>${tx.sender || "-"}</td>
+      <td>${tx.receiver || "-"}</td>
+      <td>${tx.transaction_id || "-"}</td>
+    `;
+    tbody.appendChild(row);
   });
 }
 
-// Filters (basic implementation)
-function applyFilters() {
-  const type = document.getElementById("transaction-type").value;
-  const fromDate = document.getElementById("date-from").value;
-  const toDate = document.getElementById("date-to").value;
+// Create a bar chart per category
+function showCategoryChart(data) {
+  const ctx = document.getElementById("categoryChart").getContext("2d");
+  if (window.categoryChart) window.categoryChart.destroy();
 
-  let filtered = transactions;
-
-  if (type !== "all") {
-    filtered = filtered.filter(tx => tx.type === type);
-  }
-  if (fromDate) {
-    filtered = filtered.filter(tx => tx.date >= fromDate);
-  }
-  if (toDate) {
-    filtered = filtered.filter(tx => tx.date <= toDate);
-  }
-
-  populateTable(filtered);
-}
-
-// Chart.js - Transaction Volume by Type
-function drawTypeChart() {
-  const ctx = document.getElementById("typeChart").getContext("2d");
-  const types = {};
-  transactions.forEach(tx => {
-    types[tx.type] = (types[tx.type] || 0) + tx.amount;
+  const totals = {};
+  data.forEach(tx => {
+    totals[tx.category] = (totals[tx.category] || 0) + tx.amount;
   });
 
-  new Chart(ctx, {
-    type: 'bar',
+  const labels = Object.keys(totals);
+  const values = Object.values(totals);
+
+  window.categoryChart = new Chart(ctx, {
+    type: "bar",
     data: {
-      labels: Object.keys(types),
+      labels,
       datasets: [{
-        label: "Total Volume (RWF)",
-        data: Object.values(types),
-        backgroundColor: "#ffd700",
-        borderColor: "#003366",
-        borderWidth: 1
+        label: "Total per Category",
+        data: values,
+        backgroundColor: "#4b9cd3"
       }]
     },
     options: {
       responsive: true,
+      plugins: { legend: { display: false } },
       scales: { y: { beginAtZero: true } }
     }
   });
 }
 
-// Monthly summary
-function drawMonthlyChart() {
+// Create a line chart showing totals per month
+function showMonthlyChart(data) {
   const ctx = document.getElementById("monthlyChart").getContext("2d");
-  const months = {};
+  if (window.monthlyChart) window.monthlyChart.destroy();
 
-  transactions.forEach(tx => {
-    const month = tx.date.slice(0, 7); // "YYYY-MM"
-    months[month] = (months[month] || 0) + tx.amount;
+  const totals = {};
+  data.forEach(tx => {
+    const month = tx.date.slice(0, 7); // grabs "YYYY-MM"
+    totals[month] = (totals[month] || 0) + tx.amount;
   });
 
-  new Chart(ctx, {
-    type: 'line',
+  const labels = Object.keys(totals).sort();
+  const values = labels.map(month => totals[month]);
+
+  window.monthlyChart = new Chart(ctx, {
+    type: "line",
     data: {
-      labels: Object.keys(months),
+      labels,
       datasets: [{
-        label: "Monthly Transaction Total",
-        data: Object.values(months),
-        borderColor: "#003366",
-        backgroundColor: "rgba(0, 51, 102, 0.2)",
-        fill: true
+        label: "Monthly Totals",
+        data: values,
+        borderColor: "#2e7d32",
+        fill: false,
+        tension: 0.3
       }]
     },
     options: {
       responsive: true,
+      plugins: { legend: { display: false } },
       scales: { y: { beginAtZero: true } }
     }
   });
 }
-
-// Initial load
-populateTable(transactions);
-drawTypeChart();
-drawMonthlyChart();
