@@ -8,11 +8,16 @@ cursor = conn.cursor()
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS transactions (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    address TEXT,
     type TEXT,
     amount INTEGER,
     date TEXT,
     sender TEXT,
     receiver TEXT,
+    transaction_id TEXT,
+    category TEXT,
+    body TEXT,
+    readable_date TEXT,
     transaction_id TEXT
 )
 ''')
