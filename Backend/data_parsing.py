@@ -77,8 +77,11 @@ def clean_data(messages):
 def log_unprocessed_messages(messages, logs):
     unprocessed = [msg for msg in messages if msg['category'] == 'Uncategorized']
     with open(logs, 'a') as f:
+        f.write(f"\n\n--- Unprocessed Messages ({datetime.now().strftime('%Y-%m-%d %H:%M')}) ---\n")
         for msg in unprocessed:
-            f.write(f"Unprocessed: {msg}\n")
+            f.write(f"Date: {msg['readable_date']}\n")
+            f.write(f"From: {msg['address']}\n")
+            f.write(f"Content: {msg['body']}\n\n")
 
 #5.Clean data to ready for database
 def insert_into_database(messages, db_connect):
