@@ -22,6 +22,11 @@ CREATE TABLE IF NOT EXISTS transactions (
 )
 ''')
 
+#Incase the more important fields dont exist, make them exist then.
+cursor.execute('CREATE INDEX IF NOT EXISTS idx_category ON transactions(category)')
+cursor.execute('CREATE INDEX IF NOT EXISTS idx_date ON transactions(date)')
+cursor.execute('CREATE INDEX IF NOT EXISTS idx_amount ON transactions(amount)')
+
 # Commit and close connection
 conn.commit()
 conn.close()
