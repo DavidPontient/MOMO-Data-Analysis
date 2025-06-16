@@ -1,15 +1,15 @@
-Perfect! You now have a complete working project with:
+Team Members:
 
-* ✅ Backend (`Flask` + `SQLite`)
-* ✅ Frontend HTML
-* ✅ CSS styling
-* ✅ JavaScript interactivity + chart visualizations
+*  Amaliza Shalom
+* Sipho Tremolio
+* David Pontient Kayumba
+* Hugues Munezero
 
 ---
 
 # 📊 MTN MoMo SMS Dashboard
 
-An interactive dashboard to analyze and visualize MTN MoMo transaction data. Built with **Flask**, **SQLite**, and **JavaScript**, it helps users explore financial transactions by filtering, charting, and inspecting the data.
+An interactive dashboard to analyze and visualize MTN MoMo transaction data. Built with **Flask**, **SQLite**, and **JavaScript**, it helps users explore financial transactions by filtering, and inspecting the data.
 
 ---
 
