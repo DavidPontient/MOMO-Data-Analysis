@@ -33,12 +33,13 @@ def get_transactions():
             'id': row['id'],
             'type': row['type'],
             'amount': row['amount'],
-            'fee': row['fee'],
             'date': row['date'],
             'sender': row['sender'],
             'receiver': row['receiver'],
-            'transaction_id': row['transaction_id'],
-            'raw_message': row['raw_message']
+            'category': row['category'],
+            'body': row['body'],
+            'readable_date': row['readable_date'],
+            'transaction_id': row['transaction_id']
         })
 
     return jsonify(transactions)

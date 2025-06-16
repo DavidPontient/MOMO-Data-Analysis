@@ -14,11 +14,10 @@ CREATE TABLE IF NOT EXISTS transactions (
     date TEXT,
     sender TEXT,
     receiver TEXT,
-    transaction_id TEXT,
     category TEXT,
     body TEXT,
     readable_date TEXT,
-    transaction_id TEXT
+    transaction_id TEXT             
 )
 ''')
 
