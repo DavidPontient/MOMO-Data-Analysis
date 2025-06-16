@@ -46,7 +46,7 @@ MOMO-Data-Analysis/
 ### 1. Clone the repository
 
 ```bash
-git clone MOMO-Data-Analysis
+git clone DavidPontient/MOMO-Data-Analysis
 cd Backend
 ```
 
@@ -66,7 +66,7 @@ If the database doesn't exist yet, create it with:
 python db_setup.py
 ```
 
-This creates `transactions.db` and the required `transactions` table.
+This creates `transactions.db` 
 
 ```bash
 python data_parsing.py
@@ -96,7 +96,7 @@ Then visit:
 
 ## 🖼️ Demo video 
 
-> *You can optionally add images or animated GIFs of the dashboard here.*
+>[MOMO Data Analytics Video]([http://127.0.0.1:5000](https://youtu.be/Sj4uMLcTp6A?si=0lgP3Wxq-E2X3UJb)) 
 
 ---
 
