@@ -96,7 +96,7 @@ Then visit:
 
 ## 🖼️ Demo video 
 
->[MOMO Data Analytics Video]([http://127.0.0.1:5000](https://youtu.be/Sj4uMLcTp6A?si=0lgP3Wxq-E2X3UJb)) 
+>[MOMO Data Analytics Video](https://youtu.be/Sj4uMLcTp6A?si=0lgP3Wxq-E2X3UJb) 
 
 ---
 
